@@ -1,7 +1,7 @@
 
 pro plot_OT_property_from_combine
 
-  fname=file_search('/data/keeling/a/yulanh/mydata/OT_modis','*OTnOT_2007.txt')
+  fname=file_search('/u/sciteam/yulanh/mydata/OT_modis/CCM/post_process_OT','*OTnOT*')
 
 ;  fname='OT_property_combine_bf_OTnOT_2007.txt'
 
@@ -30,7 +30,7 @@ pro plot_OT_property_from_combine
 
  for fi=0,Nf-1 do begin
 
-   if (strlen(fname[fi]) ge 76) then begin
+   if (strlen(fname[fi]) ge 83) then begin
 
    print,fname[fi]
 
@@ -81,13 +81,15 @@ pro plot_OT_property_from_combine
  lon_1=lon[ind]
  lat_1=lat[ind]
 
+stop
  ; to plot wv
+ ind1=where(OT_flag eq 0)
  
-  p=plot(lat_1,trop_wv_1a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='black',xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001])
-  p0=plot(lat_1,trop_wv_2a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='red',overplot=p);,xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001])
-  p1=plot(lat_1,trop_wv_3a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='green',overplot=p);,xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001])
- 
-  stop
+;  p=plot(lat_1,trop_wv_1a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='black',xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001],ylog=1)
+;  p0=plot(lat_1,trop_wv_2a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='red',overplot=p);,xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001])
+  ;p01=plot(lat[ind1],trop_wv_2a[ind1],
+ ; p1=plot(lat_1,trop_wv_3a[ind],linestyle='',symbol='circle',sym_filled=0,sym_size=symsz,sym_color='green',overplot=p);,xtitle='Latitude',ytitle='WV density(mg/m3)',yrange=[0.000001,0.0001])
+; 
 ;  p=plot(lat_1,center_OT_bt11_1,linestyle='',symbol='circle',sym_filled=1,sym_size=symsz,sym_color='black',xtitle='Latitude',ytitle='Center BT11',yrange=[170,250])
 ;  p1=plot(lat_1,mean_OT_bt11_1,linestyle='',symbol='circle',sym_filled=1,sym_size=symsz,sym_color='black',xtitle='Latitude',ytitle='Ave BT11',yrange=[170,250])
 ;  p2=plot(lat_1,center_OT_bt67_1-center_OT_bt11_1,linestyle='',symbol='circle',sym_filled=1,sym_size=symsz,sym_color='black',xtitle='Latitude',ytitle='Center BT6.7- BT11',yrange=[0,10])
@@ -102,32 +104,31 @@ pro plot_OT_property_from_combine
  
 
  ; barplot
- his=histogram(OTsize_1,binsize=2.5,max=25,min=1)
- x=findgen(n_elements(his))*2.5+1
- b1=barplot(x,his,fill_color='grey',xtitle='OT Diameter (km)', ytitle='Number')
+; his=histogram(OTsize_1,binsize=2.5,max=25,min=1)
+; x=findgen(n_elements(his))*2.5+1
+; b1=barplot(x,his,fill_color='grey',xtitle='OT Diameter (km)', ytitle='Number')
 
- cihis=histogram(ave_cibt-mean_OT_bt11_1,binsize=3,min=0,max=35)
- pdf2cdf,cihis,cicdf
- x1=findgen(n_elements(cihis))*3
- b2=barplot(x1,float(cihis)/total(cihis),fill_color='grey',xtitle='Ave Ci BT11 - Ave OT BT11', ytitle='Probability')
- p7=plot(x1,float(cicdf)/total(cihis),thick=2,overplot=b2) 
+; cihis=histogram(ave_cibt-mean_OT_bt11_1,binsize=3,min=0,max=35)
+; pdf2cdf,cihis,cicdf
+; x1=findgen(n_elements(cihis))*3
+; b2=barplot(x1,float(cihis)/total(cihis),fill_color='grey',xtitle='Ave Ci BT11 - Ave OT BT11', ytitle='Probability')
+; p7=plot(x1,float(cicdf)/total(cihis),thick=2,overplot=b2) 
 
- btdhis=histogram(mean_OT_bt67_1-mean_OT_bt11_1,binsize=0.5,max=7,min=0)
- pdf2cdf,btdhis,btdcdf
- x3=findgen(n_elements(btdhis))*0.5
- b3=barplot(x3,float(btdhis)/total(btdhis),fill_color='grey',xtitle='Ave BT6.7 - Ave BT11', ytitle='Probability')
- p7=plot(x3,float(btdcdf)/total(btdhis),thick=2,overplot=b3) 
+; btdhis=histogram(mean_OT_bt67_1-mean_OT_bt11_1,binsize=0.5,max=7,min=0)
+; pdf2cdf,btdhis,btdcdf
+; x3=findgen(n_elements(btdhis))*0.5
+; b3=barplot(x3,float(btdhis)/total(btdhis),fill_color='grey',xtitle='Ave BT6.7 - Ave BT11', ytitle='Probability')
+; p7=plot(x3,float(btdcdf)/total(btdhis),thick=2,overplot=b3) 
  
- btdhis_1=histogram(mean_OT_bt11_1-trop_temp_merra_1,binsize=2,max=0,min=-17)
- pdf2cdf,reverse(btdhis_1),btdcdf_1
- x4=findgen(n_elements(btdhis_1))*2-17
- b4=barplot(x4,float(btdhis_1)/total(btdhis_1),fill_color='grey',xtitle='Ave BT11 - Merra2 Tropopause T', ytitle='Probability')
- p7=plot(x4,float(reverse(btdcdf_1))/total(btdhis_1),thick=2,overplot=b4) 
+; btdhis_1=histogram(mean_OT_bt11_1-trop_temp_merra_1,binsize=2,max=0,min=-17)
+; pdf2cdf,reverse(btdhis_1),btdcdf_1
+; x4=findgen(n_elements(btdhis_1))*2-17
+; b4=barplot(x4,float(btdhis_1)/total(btdhis_1),fill_color='grey',xtitle='Ave BT11 - Merra2 Tropopause T', ytitle='Probability')
+; p7=plot(x4,float(reverse(btdcdf_1))/total(btdhis_1),thick=2,overplot=b4) 
 
  ; plot map 
- stop 
 
-  mp=map('Geographic',limit=maplimit,transparency=30)
+  mp=map('Geographic',limit=maplimit,transparency=30,position=[0.15,0.25,0.90,0.9])
   grid=mp.MAPGRID
   grid.label_position=0
   grid.linestyle='dotted'
@@ -136,7 +137,7 @@ pro plot_OT_property_from_combine
   grid.font_size=12
   mc=mapcontinents(/continents,transparency=30)
   mc['Longitudes'].label_angle=0
-  mp.scale,0.85,1
+;  mp.scale,0.85,1
 
   for i=0,n_elements(OTsize_1)-1 do begin
 	  tplonarr=fltarr(1)
@@ -147,31 +148,36 @@ pro plot_OT_property_from_combine
   endfor
 
   ; to add the label to represent the scale
-   tplatarr[0]=-110
+   tplatarr[0]=-120
    tplonarr[0]=-150
+
+;	tplatarr[0]=0.30
+;	tplonarr[0]=0.15
+
    symsz=5
+
    p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
- ;    t=text(0.25,0.10,'5',color='black')
+   t=text(0.25,0.10,'5',color='black')
 
    tplonarr[0]=-125
    symsz=10
    p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
-;    t=text(0.37,0.10,'10',color='black')
+   t=text(0.37,0.10,'10',color='black')
 
-     tplonarr[0]=-90
-     symsz=15
-     p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
- ;    t=text(0.49,0.10,'15',color='black')
+   tplonarr[0]=-90
+   symsz=15
+   p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
+   t=text(0.49,0.10,'15',color='black')
 
-    tplonarr[0]=-30
-    symsz=20
-    p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
- ;    t=text(0.61,0.10,'15',color='black')
+   tplonarr[0]=-30
+   symsz=20
+   p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',overplot=mp,color='r',transparency=50)
+   t=text(0.61,0.10,'15',color='black')
 
     tplonarr[0]=0
     symsz=25
     p=plot(tplonarr,tplatarr,symbol='circle',sym_filled=1,sym_size=symsz/10.,linestyle='',color='r',transparency=50,overplot=mp)
- ;    t=text(0.73,0.10,'25',color='black')
+    t=text(0.73,0.10,'25',color='black')
 
   stop
 end
